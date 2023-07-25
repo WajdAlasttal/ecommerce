@@ -1,18 +1,18 @@
 import joi from"joi";
 import { generalFeilds } from "../../Middleware/validation.js";
 
-export const createCategory = joi.object({
+export const createSubCategory = joi.object({
     name :joi.string().min(2).max(20).required(),
     file:generalFeilds.file.required(),
     
 }).required();
 
-export const updateCategory = joi.object({
+export const updateSubCategory = joi.object({
     categoryId: generalFeilds.id,
     name :joi.string().min(2).max(20),
     file:generalFeilds.file,
 }).required();
 
-export const getCategoryById = joi.object({
+export const getSubCategoryById = joi.object({
     categoryId: generalFeilds.id,
 }).required();

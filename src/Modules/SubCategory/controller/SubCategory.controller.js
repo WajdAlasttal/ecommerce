@@ -10,7 +10,8 @@ export const getCategoryById = async(req,res,next)=>{
     const category = await categoryModel.findById(req.params.categoryId);
     return res.status(200).json({message:'success',category});
 }
-export const createCategory = async(req,res,next)=>{
+export const createSubCategory = async(req,res,next)=>{
+    return res.json(req.params.categoryId);
     const {name}=req.body;
     const slug = slugify(name);
     // return res.json(slug)

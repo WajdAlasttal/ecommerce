@@ -1,14 +1,13 @@
 
 import joi from 'joi'
+import { Types } from 'mongoose';
 
 const validationObjectId =(value,helper)=>{
 
     if(Types.ObjectId.isValid(value)){
         return true 
     }else {
-
-        return helper.message("rteertertertertreterte")
-
+        return helper.message("id is invalid")
     }
 }
 
@@ -27,13 +26,16 @@ export const generalFeilds = {
         size:joi.number().positive().required(),
         dest:joi.string(),
     }),
-    id:joi.string().custom(validationObjectId).min(24).max(24).required(),
+    id:joi.string().custom(validationObjectId).required(),
 }
 
 const validation = (schema)=>{
     return (req,res,next)=>{
-        const inputsData = {...req.body,...req.params,...req.query,file:req.file};
+        const inputsData = {...req.body,...req.params,...req.query};
         // return res.json(inputsData)
+        if(req.file){
+            inputsData.file=req.file;
+        }
         const validationResult = schema.validate(inputsData,{abortEarly:false});
         // return res.json(validationResult)
         if(validationResult.error ?.details){
