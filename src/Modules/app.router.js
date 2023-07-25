@@ -1,9 +1,11 @@
-
 import connectDB from '../../DB/connection.js';
 import AuthRouter from './Auth/Auth.router.js';
 import UserRouter from './User/User.router.js';
 import CategoryRouter from './Category/Category.router.js';
 import SubCategoryRouter from './SubCategory/SubCategory.router.js';
+import CouponRouter from './Coupon/Coupon.router.js';
+import BrandRouter from './Brand/Brand.router.js';
+
 import path from 'path'; 
 import {fileURLToPath} from 'url';
 import { globalErrorHandler } from '../Services/errorHandling.js';
@@ -18,6 +20,8 @@ const initApp=(app,express)=>{
     app.use('/user', UserRouter);
     app.use('/category',CategoryRouter);
     app.use('/subcategory',SubCategoryRouter);
+    app.use('/coupon',CouponRouter);
+    app.use('/brand',BrandRouter);
 
     app.use('/*', (req,res)=>{
         return res.json({messaga:"page not found"});
