@@ -1,47 +1,52 @@
 import slugify from "slugify";
 import cloudinary from "../../../Services/cloudinary.js";
-import categoryModel from "../../../../DB/model/Category.model.js";
+import subcategoryModel from "../../../../DB/model/SubCategory.model.js";
 
-export const getCategories = async(req,res,next)=>{
-    const categories = await categoryModel.find();
-    return res.status(200).json({categories});
+export const getSubCategories = async(req,res,next)=>{
+    const subcategories = await subcategoryModel.find().populate({
+        path:'categoryId',
+        select:'-_id name'
+    })
+    return res.status(200).json({subcategories});
 }
-export const getCategoryById = async(req,res,next)=>{
-    const category = await categoryModel.findById(req.params.categoryId);
-    return res.status(200).json({message:'success',category});
+export const getSubCategoryById = async(req,res,next)=>{
+    const {categoryId}=req.params;
+    const subcategory = await subcategoryModel.find({categoryId});
+    return res.status(200).json({message:'success',subcategory});
 }
 export const createSubCategory = async(req,res,next)=>{
-    return res.json(req.params.categoryId);
+    const {categoryId} = req.params;
     const {name}=req.body;
     const slug = slugify(name);
     // return res.json(slug)
-    if(await categoryModel.findOne({name})){
-        return next(new Error("Duplicated category name",{cause:409}))
+    if(await subcategoryModel.findOne({name})){
+        return next(new Error("Duplicated Sub Category name",{cause:409}))
     }
-    const{public_id,secure_url} = await cloudinary.uploader.upload(req.file.path,{folder: `${process.env.APP_NAME}/category`});
-    const category = await categoryModel.create({name,slug,image:{public_id,secure_url}});
-    return res.status(201).json({message:'success',category})
+    const{public_id,secure_url} = await cloudinary.uploader.upload(req.file.path,{folder: `${process.env.APP_NAME}/subcategory`});
+    const subcategory = await subcategoryModel.create({name,slug,categoryId,image:{public_id,secure_url}});
+    return res.status(201).json({message:'success',subcategory})
 }
-export const updateCategory = async(req,res,next)=>{
-    const category = await categoryModel.findById(req.params.categoryId);
-    if(!category){
-        return next(new Error('invalid category id',{cause:400}))
+export const updateSubCategory = async(req,res,next)=>{
+    const {subcategoryId,categoryId} = req.params;
+    const subcategory = await subcategoryModel.findOne({_id:subcategoryId,categoryId});
+    if(!subcategory){
+        return next(new Error('invalid sub category id',{cause:400}))
     }
     if(req.body.name){
-        if(category.name == req.body.name){
+        if(subcategory.name == req.body.name){
             return next(new Error("old name matches new name",{cause:400}))
         }
-        if(await categoryModel.findOne({name:req.body.name})){
-            return next(new Error("Duplicated category name",{cause:409}))
+        if(await subcategoryModel.findOne({name:req.body.name})){
+            return next(new Error("Duplicated sub category name",{cause:409}))
         }
-        category.name = req.body.name;
-        category.slug = slugify(req.body.name);
+        subcategory.name = req.body.name;
+        subcategory.slug = slugify(req.body.name);
     }
     if(req.file){
-        const{public_id,secure_url} = await cloudinary.uploader.upload(req.file.path,{folder: `${process.env.APP_NAME}/category`});
-        await cloudinary.uploader.destroy(category.image.public_id);
-        category.image={secure_url,public_id}
+        const{public_id,secure_url} = await cloudinary.uploader.upload(req.file.path,{folder: `${process.env.APP_NAME}/subcategory`});
+        await cloudinary.uploader.destroy(subcategory.image.public_id);
+        subcategory.image={secure_url,public_id}
     }
-    await category.save();
-    return res.json({message:"success",category});
+    await subcategory.save();
+    return res.json({message:"success",subcategory});
 }

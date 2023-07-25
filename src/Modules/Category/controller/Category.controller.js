@@ -3,7 +3,7 @@ import cloudinary from "../../../Services/cloudinary.js";
 import categoryModel from "../../../../DB/model/Category.model.js";
 
 export const getCategories = async(req,res,next)=>{
-    const categories = await categoryModel.find();
+    const categories = await categoryModel.find().populate('subcategory');
     return res.status(200).json({categories});
 }
 export const getCategoryById = async(req,res,next)=>{
