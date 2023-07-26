@@ -1,13 +1,15 @@
-
 import mongoose, {Schema,model} from 'mongoose';
 const userSchema = new Schema ({
     userName:{
         type:String,
-        required:true,
+        required:[true,'Username is required'],
+        min:[2],
+        max:[20],
     },
     email:{
         type:String,
         required:true,
+        unique:true,
     },
     password:{
         type:String,
@@ -17,11 +19,29 @@ const userSchema = new Schema ({
         type:Boolean,
         default:false,
     },
-    profilePic:{
-        type:String,
+    image:{
+        type:Object,
     },
-    profolePublicUrl:String,
-    coverPic:[String],
+    phone:{
+        type:String
+    },
+    role:{
+        type:String,
+        default:'User',
+        enum:['User','Admin']
+    },
+    status:{
+        type:String,
+        default:'Active',
+        enum:['Active','Not_Active'],  
+    },
+    gender:{
+        type:String,
+        enum:["Male","Female"]
+    },
+    address:{
+        type:String,
+    } 
 },
 {
     timestamps:true
