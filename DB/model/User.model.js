@@ -41,7 +41,11 @@ const userSchema = new Schema ({
     },
     address:{
         type:String,
-    } 
+    },
+    forgetCode:{
+        type:String,
+        default:null
+    }
 },
 {
     timestamps:true

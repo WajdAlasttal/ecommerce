@@ -7,8 +7,10 @@ const router =Router();
 
 router.post('/signup',validation(validators.signupSchema),asyncHandler(AuthController.signup))
 router.post('/login',validation(validators.loginSchema),asyncHandler(AuthController.login))
-router.get('/confirmEmail/:token',validation(validators.token),AuthController.confirmEmail)
-router.get('/NewconfirmEmail/:token',validation(validators.token),AuthController.confirmEmail)
+router.get('/confirmEmail/:token',validation(validators.token),asyncHandler(AuthController.confirmEmail))
+router.get('/NewconfirmEmail/:token',validation(validators.token),asyncHandler(AuthController.confirmEmail))
+router.patch('/sendCode',validation(validators.sendCode),asyncHandler(AuthController.sendCode))
+router.patch('/forgetPassword',validation(validators.forgetPassword),asyncHandler(AuthController.forgetPassword))
 
 
 export default router;

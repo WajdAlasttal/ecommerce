@@ -19,3 +19,14 @@ export const loginSchema = joi.object({
         email:generalFeilds.email,
         password:generalFeilds.password,
 }).required();
+
+export const sendCode = joi.object({
+    email:generalFeilds.email,
+}).required();
+
+export const forgetPassword = joi.object({
+    code:joi.string().required(),
+    email:generalFeilds.email,
+    password:generalFeilds.password,
+    cPassword:joi.string().valid(joi.ref('password')).required(),
+}).required();

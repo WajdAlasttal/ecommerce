@@ -1,3 +1,4 @@
+import { customAlphabet } from "nanoid";
 import userModel from "../../../../DB/model/User.model.js";
 import {generateToken,verifyToken,} from "../../../Services/generateAndVerifyToken.js";
 import { compare, hash } from "../../../Services/hashAndCompare.js";
@@ -73,6 +74,16 @@ export const NewconfirmEmail = async (req, res, next) => {
   return res.status(200).send("<p>new confirm email is send to your inbox</p>");
 };
 
+export const sendCode = async (req, res, next) =>{
+    const {email}=req.body;
+    let code = customAlphabet('123456789ABCD',4);
+    code = code();
+    const user = await userModel.findOneAndUpdate({email},{forgetCode:code},{new:true});
+    const html=`<p> YOUR CODE IS : ${code}`;
+    await sendEmail(email,'forget password',html);
+    return res.status(200).json({message:"success",user});
+}
+
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -92,4 +103,20 @@ export const login = async (req, res, next) => {
       return res.status(200).json({ message: "Done", token,refreshToken });
     }
   }
-};
+}
+
+export const forgetPassword = async(req,res,next)=>{
+    const {code,email,password}=req.body;
+    const user = await userModel.findOne({email});
+    if(!user){
+        return next(new Error("not registered account", { cause: 400 }));
+    }
+    if(user.forgetCode != code || !code ){
+      return next(new Error("invalid code", { cause: 400 }));
+    }
+    user.password=hash(password);
+    user.forgetCode=null;
+    await user.save();
+    return res.status(200).json({message:"success"});
+
+}
