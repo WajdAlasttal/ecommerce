@@ -11,10 +11,11 @@ export const signupSchema = joi.object({
     cPassword:joi.string().valid(joi.ref('password')).required(),
 }).required();
 
+export const token = joi.object({
+    token:joi.string().required(),
+}).required();
 
-export const loginSchema = {
-    body:joi.object({
+export const loginSchema = joi.object({
         email:generalFeilds.email,
         password:generalFeilds.password,
-    }).required()
-};
+}).required();
