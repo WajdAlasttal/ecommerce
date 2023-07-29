@@ -9,7 +9,7 @@ export const createBrand = async(req,res,next)=>{
         return next(new Error("Duplicated brand name",{cause:409}))
     }
     const{public_id,secure_url} = await cloudinary.uploader.upload(req.file.path,{folder: `${process.env.APP_NAME}/brand`});
-    const brand = await brandModel.create({name,image:{public_id,secure_url},categoryId});
+    const brand = await brandModel.create({name,image:{public_id,secure_url},categoryId,createdBy:req.user._id,updatedBy:req.user._id});
     return res.status(201).json({message:'success',brand})
 }
 export const updateBrand = async(req,res,next)=>{
@@ -31,6 +31,7 @@ export const updateBrand = async(req,res,next)=>{
         await cloudinary.uploader.destroy(brand.image.public_id);
         brand.image={secure_url,public_id}
     }
+    brand.updatedBy=req.user._id;
     await brand.save();
     return res.json({message:"success",brand});
 }

@@ -6,6 +6,8 @@ export const createCoupon = async(req,res,next)=>{
     if(await couponModel.findOne({name})){
         return next(new Error("Duplicated coupon name",{cause:409}))
     }
+    req.body.createdBy=req.user._id;
+    req.body.updatedBy=req.user._id;
     const coupon = await couponModel.create(req.body);
     return res.status(201).json({message:'success',coupon})
 }
@@ -26,6 +28,7 @@ export const updateCoupon = async(req,res,next)=>{
     if(req.body.amount){
         coupon.amount = req.body.amount; 
     }
+    coupon.updatedBy=req.user._id;
     await coupon.save();
     return res.json({message:"success",coupon});
 }

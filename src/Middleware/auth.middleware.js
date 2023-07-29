@@ -19,14 +19,16 @@ export const auth = (accessRoles=[]) => {
       if (!decoded) {
         return next(new Error("invalid token payload", { cause: 400 }));
       }
-      const user = await userModel.findById(decoded.id).select("username role");
+      const user = await userModel.findById(decoded.id).select("username role changePasswordTime");
       if (!user) {
         return next(new Error("not registered user", { cause: 401 }));
       }
       if(!accessRoles.includes(user.role)){
         return next(new Error("not authorized", { cause: 403 }));
       }
-
+      if(parseInt(user.changePasswordTime?.getTime() / 1000)>decoded.iat){
+        return next(new Error("Expired Token",{cause:400}));
+      }
       req.user = user;
       return next();
     }

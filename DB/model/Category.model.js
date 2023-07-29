@@ -15,7 +15,13 @@ const categorySchema = new Schema({
     },
     createdBy:{
         type:Types.ObjectId,
-        ref : 'User'
+        ref : 'User',
+        required:true
+    },
+    updatedBy:{
+        type:Types.ObjectId,
+        ref : 'User',
+        required:true
     }
 },
 {

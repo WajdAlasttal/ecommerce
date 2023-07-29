@@ -23,7 +23,7 @@ export const createSubCategory = async(req,res,next)=>{
         return next(new Error("Duplicated Sub Category name",{cause:409}))
     }
     const{public_id,secure_url} = await cloudinary.uploader.upload(req.file.path,{folder: `${process.env.APP_NAME}/subcategory`});
-    const subcategory = await subcategoryModel.create({name,slug,categoryId,image:{public_id,secure_url}});
+    const subcategory = await subcategoryModel.create({name,slug,categoryId,image:{public_id,secure_url},createdBy:req.user._id,updatedBy:req.user._id});
     return res.status(201).json({message:'success',subcategory})
 }
 export const updateSubCategory = async(req,res,next)=>{
@@ -47,6 +47,7 @@ export const updateSubCategory = async(req,res,next)=>{
         await cloudinary.uploader.destroy(subcategory.image.public_id);
         subcategory.image={secure_url,public_id}
     }
+    subcategory.updatedBy=req.user._id;
     await subcategory.save();
     return res.json({message:"success",subcategory});
 }
