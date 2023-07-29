@@ -5,6 +5,7 @@ import CategoryRouter from './Category/Category.router.js';
 import SubCategoryRouter from './SubCategory/SubCategory.router.js';
 import CouponRouter from './Coupon/Coupon.router.js';
 import BrandRouter from './Brand/Brand.router.js';
+import ProductRouter from './Product/Product.router.js';
 
 import path from 'path'; 
 import {fileURLToPath} from 'url';
@@ -22,6 +23,7 @@ const initApp=(app,express)=>{
     app.use('/subcategory',SubCategoryRouter);
     app.use('/coupon',CouponRouter);
     app.use('/brand',BrandRouter);
+    app.use('/product',ProductRouter);
 
     app.use('/*', (req,res)=>{
         return res.json({messaga:"page not found"});
