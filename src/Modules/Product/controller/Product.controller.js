@@ -164,7 +164,7 @@ export const forceDelete = async (req, res, next) => {
   }
   return res.json({ message: "success", product });
 };
-export const restore = async(req,res,next)=>{
+export const restore = async (req, res, next) => {
   let { productId } = req.params;
   const product = await productModel.findOneAndUpdate(
     { _id: productId, deleted: true },
@@ -174,28 +174,27 @@ export const restore = async(req,res,next)=>{
   if (!product) {
     return next(new Error("No Product Found", { cause: 400 }));
   }
-  return res.json({ message: "success", product }); 
-}
-export const getSoftDelete = async(req,res,next)=>{
-  const product = await productModel.find({deleted:true});
+  return res.json({ message: "success", product });
+};
+export const getSoftDelete = async (req, res, next) => {
+  const product = await productModel.find({ deleted: true });
   if (!product) {
     return next(new Error("No Product Found", { cause: 400 }));
   }
-  return res.json({ message: "success", product }); 
-}
-export const getProduct = async(req,res,next)=>{
-  const {productId} = req.params;
+  return res.json({ message: "success", product });
+};
+export const getProduct = async (req, res, next) => {
+  const { productId } = req.params;
   const product = await productModel.findById(productId);
   if (!product) {
     return next(new Error("No Product Found", { cause: 400 }));
   }
-  return res.json({ message: "success", product }); 
-}
-export const getProducts = async(req,res,next)=>{
+  return res.json({ message: "success", product });
+};
+export const getProducts = async (req, res, next) => {
   const products = await productModel.find();
   if (!products) {
     return next(new Error("No Product Found", { cause: 400 }));
   }
-  return res.json({ message: "success", products }); 
-}
-
+  return res.json({ message: "success", products });
+};

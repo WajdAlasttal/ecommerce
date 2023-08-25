@@ -9,7 +9,10 @@ const couponSchema = new Schema({
         type:Number,
         default:1,
     },
-    expireDate:Date,
+    expireDate:{
+        type:String,
+        required:true
+    },
     usedBy:[
         {
         type:Types.ObjectId,

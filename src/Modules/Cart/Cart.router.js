@@ -5,6 +5,10 @@ import { endPoint } from "./Cart.endpoint.js";
 import validation from "../../Middleware/validation.js";
 import { asyncHandler } from "../../Services/errorHandling.js";
 const router = Router();
-router.post("/", auth(endPoint.create), cartController.addProductToCart);
+router.post(
+  "/",
+  auth(endPoint.create),
+  asyncHandler(cartController.addProductToCart)
+);
 
 export default router;
