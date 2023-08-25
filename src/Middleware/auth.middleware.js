@@ -9,11 +9,11 @@ export const auth = (accessRoles=[]) => {
   return asyncHandler(async (req, res, next) => {
     const { authorization } = req.headers;
     if (!authorization?.startsWith(process.env.BEARERKEY)) {
-      return next(new Error("invalid token", { cause: 400 }));
+      return next(new Error("invalid tokenee", { cause: 400 }));
     } else {
       const token = authorization.split(process.env.BEARERKEY)[1];
       if (!token) {
-        return next(new Error("invalid token", { cause: 400 }));
+        return next(new Error("invalid token:)", { cause: 400 }));
       }
       const decoded = verifyToken(token, process.env.LOGIN_TOKEN);
       if (!decoded) {

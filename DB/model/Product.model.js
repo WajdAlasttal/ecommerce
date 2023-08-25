@@ -67,7 +67,11 @@ const productSchema = new Schema({
         type:Types.ObjectId,
         ref : 'User',
         required:true
-    }
+    },
+    deleted:{
+        type:Boolean,
+        default:false,
+    },
 },
 {
     timestamps:true

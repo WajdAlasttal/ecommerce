@@ -30,8 +30,15 @@ const subcategorySchema = new Schema({
     }
 },
 {
+    toJSON:{virtuals:true},
+    toObject:{virtuals:true},
     timestamps:true
 });
+subcategorySchema.virtual('products',{
+  localField:'_id',
+  foreignField:'subCategoryId',
+  ref:'Product'
+})
 
 const subcategoryModel = mongoose.models.Subcategory || model('Subcategory', subcategorySchema);
 export default subcategoryModel;
